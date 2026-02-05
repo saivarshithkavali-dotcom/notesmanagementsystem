@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}My Notes{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-7">
+
+    <h4 class="mb-3">My Notes</h4>
+
+    {% if notes %}
+      {% for note in notes %}
+        <div class="card shadow-sm mb-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ note.title }}</h5>
+
+            <p class="card-text text-muted">
+              {{ note.content[:150] }}{% if note.content|length > 150 %}...{% endif %}
+            </p>
+
+            <small class="text-muted">
+              Created at: {{ note.created_at }}
+            </small>
+
+            <div class="mt-3">
+              <a class="btn btn-sm btn-primary"
+                 href="{{ url_for('viewnotes', note_id=note.id) }}">
+                View
+              </a>
+
+              <a class="btn btn-sm btn-warning"
+                 href="{{ url_for('updatenote', note_id=note.id) }}">
+                Edit
+              </a>
+
+              <form action="{{ url_for('deletenote', note_id=note.id) }}"
+                    method="POST"
+                    class="d-inline">
+                <button class="btn btn-sm btn-danger"
+                        onclick="return confirm('Delete this note?')">
+                  Delete
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-info">
+        No notes yet. Click <strong>Add Note</strong> to create one.
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
